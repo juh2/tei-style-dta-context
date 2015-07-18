@@ -1,0 +1,75 @@
+\startxmlsetups xml:teisetups
+        \xmlsetsetup{#1}{*}{-}
+        \xmlsetsetup{#1}{TEI|text|body|div|head|p|lb|cit|quote|hi}{xml:*}
+        \xmlsetsetup{#1}{note[@place='foot']}{xml:footnote}
+        \xmlsetsetup{#1}{pb}{xml:pb}
+%        \xmlsetsetup{#1}{div[@n="2"]}{xml:subsection}
+%        \xmlsetsetup{#1}{hi[@rendition='#g']}{xml:hig}
+\stopxmlsetups
+
+\xmlregistersetup{xml:teisetups}
+
+\startxmlsetups xml:TEI
+	\xmlflush{#1}
+\stopxmlsetups
+
+\startxmlsetups xml:text
+	\xmlflush{#1}
+\stopxmlsetups
+
+\startxmlsetups xml:body
+  \startlinenumbering
+	\xmlflush{#1}
+\stopxmlsetups
+
+\setuplinenumbering[location=inner,
+                    step=5,
+                    method=page,
+                    style=\tfxx,
+                    align=left,
+                    distance=0.3em,
+                    width=0.3cm]
+
+\startxmlsetups xml:div
+	\xmlflush{#1}
+\stopxmlsetups
+
+\setuphead[section]
+  [number=no]
+
+\startxmlsetups xml:head
+  {\startsection
+  \startalign[center]
+  \tfc
+  \xmlflush{#1}
+  \par
+  \stopalign
+  \stopsection}
+\stopxmlsetups
+
+\startxmlsetups xml:hig
+	\xmlflush{#1}
+\stopxmlsetups
+
+\startxmlsetups xml:footnote
+	\footnote{\xmlflush{#1}}
+\stopxmlsetups
+
+
+\startxmlsetups xml:p
+	\xmlflush{#1}
+\stopxmlsetups
+
+\startxmlsetups xml:cit:quote:hi
+  \startblockquote
+	\xmlflush{#1}
+  \stopblockquote
+\stopxmlsetups
+
+\startxmlsetups xml:lb
+	\crlf
+\stopxmlsetups
+
+\startxmlsetups xml:pb
+	{\tfxx/\startmarginblock\xmlatt{#1}{n}\stopmarginblock}
+\stopxmlsetups
