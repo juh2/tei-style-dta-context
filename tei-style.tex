@@ -1,10 +1,24 @@
 \startxmlsetups xml:teisetups
         \xmlsetsetup{#1}{*}{-}
-        \xmlsetsetup{#1}{TEI|text|body|div|head|p|lb|cit|quote|hi}{xml:*}
+        \xmlsetsetup{#1}{TEI|text|body|div|head|p|lb|cit|quote|bibl}{xml:*}
         \xmlsetsetup{#1}{note[@place='foot']}{xml:footnote}
+% Sometimes a footnote is spread in two different note-tags.
+% Eg. in schiller_erziehung02_1795.TEI-P5.xml
+
         \xmlsetsetup{#1}{pb}{xml:pb}
 %        \xmlsetsetup{#1}{div[@n="2"]}{xml:subsection}
-%        \xmlsetsetup{#1}{hi[@rendition='#g']}{xml:hig}
+        \xmlsetsetup{#1}{hi[contains(@rendition, 'in')]}{xml:hi:in}
+        \xmlsetsetup{#1}{hi[contains(@rendition, 'g')]}{xml:hi:g}
+        \xmlsetsetup{#1}{hi[contains(@rendition, 'et')]}{xml:hi:et}
+        \xmlsetsetup{#1}{hi[contains(@rendition, 'aq')]}{xml:hi:aq}
+        \xmlsetsetup{#1}{hi[contains(@rendition, 'k')]}{xml:hi:k}
+        \xmlsetsetup{#1}{p[contains(@rendition, 'c')]}{xml:p:c}
+        \xmlsetsetup{#1}{bibl[contains(@rendition, 'k')]}{xml:bibl:k}
+
+% I have to setup the highlighting patterns for each tag. This is bad.
+% A mechanism to match highlighting patterns independently would be
+% better.
+
 \stopxmlsetups
 
 \xmlregistersetup{xml:teisetups}
@@ -18,7 +32,7 @@
 \stopxmlsetups
 
 \startxmlsetups xml:body
-  \startlinenumbering
+%  \startlinenumbering % Does not start correctly on the first page
 	\xmlflush{#1}
 \stopxmlsetups
 
@@ -42,22 +56,69 @@
   \startalign[center]
   \tfc
   \xmlflush{#1}
-  \par
   \stopalign
   \stopsection}
 \stopxmlsetups
 
-\startxmlsetups xml:hig
+\startxmlsetups xml:hi:in
+	{\placeinitial \xmlflush{#1}}
+\stopxmlsetups
+
+\startxmlsetups xml:hi:g
+	{\em \xmlflush{#1}}
+\stopxmlsetups
+
+\startxmlsetups xml:hi:et
+	{\em \xmlflush{#1}}
+\stopxmlsetups
+
+\startxmlsetups xml:hi:aq
+	{\ss \xmlflush{#1}}
+\stopxmlsetups
+
+\startxmlsetups xml:hi:k
+	\cap{\xmlflush{#1}}
+\stopxmlsetups
+
+\startxmlsetups xml:hi:c
+	{\startalign[center]
+  \xmlflush{#1}
+  \stopalign}
+\stopxmlsetups
+
+\startxmlsetups xml:cit
 	\xmlflush{#1}
 \stopxmlsetups
+
+\startxmlsetups xml:quote
+	\xmlflush{#1}
+\stopxmlsetups
+
+\startxmlsetups xml:bibl
+  \rightaligned{
+	\xmlflush{#1}}
+\stopxmlsetups
+
+\startxmlsetups xml:bibl:k
+  \rightaligned{
+	\cap{\xmlflush{#1}}}
+\stopxmlsetups
+
 
 \startxmlsetups xml:footnote
 	\footnote{\xmlflush{#1}}
 \stopxmlsetups
 
-
 \startxmlsetups xml:p
 	\xmlflush{#1}
+\stopxmlsetups
+
+\startxmlsetups xml:p:c
+	{\par
+  \startalign[center]
+  \xmlflush{#1}
+  \stopalign
+  }
 \stopxmlsetups
 
 \startxmlsetups xml:cit:quote:hi
@@ -71,5 +132,8 @@
 \stopxmlsetups
 
 \startxmlsetups xml:pb
-	{\tfxx/\startmarginblock\xmlatt{#1}{n}\stopmarginblock}
+	{\tfxx/\inothermargin{\xmlatt{#1}{n}}}
 \stopxmlsetups
+
+
+\setupinitial[font=Bold sa 4,distance=3pt,state=start,n=3]
