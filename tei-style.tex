@@ -1,5 +1,6 @@
 \startxmlsetups xml:teisetups
         \xmlsetsetup{#1}{*}{-}
+        \xmlsetsetup{#1}{teiHeader|fileDesc|titleStmt|title|author|persName|surname|forname}
         \xmlsetsetup{#1}{TEI|text|body|div|head|p|lb|cit|quote|bibl}{xml:*}
         \xmlsetsetup{#1}{note[@place='foot']}{xml:footnote}
 % Sometimes a footnote is spread in two different note-tags.
@@ -7,13 +8,13 @@
 
         \xmlsetsetup{#1}{pb}{xml:pb}
 %        \xmlsetsetup{#1}{div[@n="2"]}{xml:subsection}
-        \xmlsetsetup{#1}{hi[contains(@rendition, 'in')]}{xml:hi:in}
-        \xmlsetsetup{#1}{hi[contains(@rendition, 'g')]}{xml:hi:g}
-        \xmlsetsetup{#1}{hi[contains(@rendition, 'et')]}{xml:hi:et}
-        \xmlsetsetup{#1}{hi[contains(@rendition, 'aq')]}{xml:hi:aq}
-        \xmlsetsetup{#1}{hi[contains(@rendition, 'k')]}{xml:hi:k}
-        \xmlsetsetup{#1}{p[contains(@rendition, 'c')]}{xml:p:c}
-        \xmlsetsetup{#1}{bibl[contains(@rendition, 'k')]}{xml:bibl:k}
+        \xmlsetsetup{#1}{hi[contains(@rendition, '\letterhash in')]}{xml:hi:in}
+        \xmlsetsetup{#1}{hi[@rendition='\letterhash g']}{xml:hi:g}
+        \xmlsetsetup{#1}{hi[contains(@rendition, '\letterhash et')]}{xml:hi:et}
+        \xmlsetsetup{#1}{hi[contains(@rendition, '\letterhash aq')]}{xml:hi:aq}
+        \xmlsetsetup{#1}{hi[contains(@rendition, '\letterhash k')]}{xml:hi:k}
+        \xmlsetsetup{#1}{p[contains(@rendition, '\letterhash c')]}{xml:p:c}
+        \xmlsetsetup{#1}{bibl[contains(@rendition, '\letterhash k')]}{xml:bibl:k}
 
 % I have to setup the highlighting patterns for each tag. This is bad.
 % A mechanism to match highlighting patterns independently would be
@@ -22,6 +23,40 @@
 \stopxmlsetups
 
 \xmlregistersetup{xml:teisetups}
+
+\startxmlsetups xml:teiHeader
+	\xmlflush{#1}
+\stopxmlsetups
+
+\startxmlsetups xml:fileDesc
+	\xmlflush{#1}
+\stopxmlsetups
+
+\startxmlsetups xml:titleStmt
+	\xmlflush{#1}
+\stopxmlsetups
+
+\startxmlsetups xml:title
+  \setupinteraction[title={\xmlflush{#1}}]
+	\title{\xmlflush{#1}}
+\stopxmlsetups
+
+\startxmlsetups xml:author
+	\xmlflush{#1}
+\stopxmlsetups
+
+\startxmlsetups xml:persName
+	\xmlflush{#1}
+\stopxmlsetups
+
+\startxmlsetups xml:forname
+	\xmlflush{#1}
+\stopxmlsetups
+
+
+\startxmlsetups xml:surname
+	\xmlflush{#1}
+\stopxmlsetups
 
 \startxmlsetups xml:TEI
 	\xmlflush{#1}
@@ -110,7 +145,9 @@
 \stopxmlsetups
 
 \startxmlsetups xml:p
+  \par
 	\xmlflush{#1}
+  \par
 \stopxmlsetups
 
 \startxmlsetups xml:p:c
@@ -127,13 +164,53 @@
   \stopblockquote
 \stopxmlsetups
 
-\startxmlsetups xml:lb
-	\crlf
-\stopxmlsetups
 
 \startxmlsetups xml:pb
 	{\tfxx/\inothermargin{\xmlatt{#1}{n}}}
 \stopxmlsetups
 
 
+% This mode typesets the source with the original
+% linebreaks and hyphenation of the scanned book
+
+\startmode[original]
+\startxmlsetups xml:lb
+	\crlf
+\stopxmlsetups
+\stopmode
+
+% This mode typesetzs the source in a new modern fashion.
+% Original linebreaks and hyphenations of the scanned book
+% are removed
+
+\startmode[newedition]
+\startxmlsetups xml:p
+  \par
+	\cldcontext{string.gsub([[\xmlflush{#1}]], "¬", "\\nospace")}
+  \par
+\stopxmlsetups
+
+\startxmlsetups xml:lb
+\stopxmlsetups
+\stopmode
+
 \setupinitial[font=Bold sa 4,distance=3pt,state=start,n=3]
+
+
+% We need the font FreeSerif to display combining diacritical marks.
+% Maybe this should be moved to a style environment
+
+\definefontfamily
+    [mainface]
+    [rm]
+    [FreeSerif]
+%    [UnifrakturMaguntia] % If we have sources that needs Fraktur
+
+\setupbodyfont
+    [mainface, 12pt]
+
+
+
+\placebookmarks
+    [part,chapter,hiddentitle,section,subsection,subsubsection]
+    [part,chapter,hiddentitle]
