@@ -1,20 +1,25 @@
 \startxmlsetups xml:teisetups
-        \xmlsetsetup{#1}{*}{-}
-        \xmlsetsetup{#1}{teiHeader|fileDesc|titleStmt|title|author|persName|surname|forname}
-        \xmlsetsetup{#1}{TEI|text|body|div|head|p|lb|cit|quote|bibl}{xml:*}
-        \xmlsetsetup{#1}{note[@place='foot']}{xml:footnote}
+    \xmlsetsetup{#1}{*}{-}
+    \xmlsetsetup{#1}{teiHeader|fileDesc|titleStmt|title|author|persName|surname|forname|editionStmt|publicationStmt|encodingDesc|profileDesc|langUsage|language}{xml:*}
+    \xmlsetsetup{#1}{TEI|text|body|div|p|lb|cit|quote|bibl}{xml:*}
+    \xmlsetsetup{#1}{div[@n='1']/head}{xml:chapter}
+    \xmlsetsetup{#1}{div[@n='2']/head}{xml:section}
+    \xmlsetsetup{#1}{fileDesc/titleStmt}{} % remove unwanted titles
+    \xmlsetsetup{#1}{div/lb}{} % remove linebreak outside titles
+    \xmlsetsetup{#1}{p/lb}{} % remove linebreak inside paragraphs
+    \xmlsetsetup{#1}{note[@place='foot']}{xml:footnote}
 % Sometimes a footnote is spread in two different note-tags.
 % Eg. in schiller_erziehung02_1795.TEI-P5.xml
 
-        \xmlsetsetup{#1}{pb}{xml:pb}
-%        \xmlsetsetup{#1}{div[@n="2"]}{xml:subsection}
-        \xmlsetsetup{#1}{hi[contains(@rendition, '\letterhash in')]}{xml:hi:in}
-        \xmlsetsetup{#1}{hi[@rendition='\letterhash g']}{xml:hi:g}
-        \xmlsetsetup{#1}{hi[contains(@rendition, '\letterhash et')]}{xml:hi:et}
-        \xmlsetsetup{#1}{hi[contains(@rendition, '\letterhash aq')]}{xml:hi:aq}
-        \xmlsetsetup{#1}{hi[contains(@rendition, '\letterhash k')]}{xml:hi:k}
-        \xmlsetsetup{#1}{p[contains(@rendition, '\letterhash c')]}{xml:p:c}
-        \xmlsetsetup{#1}{bibl[contains(@rendition, '\letterhash k')]}{xml:bibl:k}
+    \xmlsetsetup{#1}{pb}{xml:pb}
+    \xmlsetsetup{#1}{hi[contains(@rendition, '\letterhash in')]}{xml:hi:in}
+    \xmlsetsetup{#1}{hi[@rendition='\letterhash g']}{xml:hi:g}
+    \xmlsetsetup{#1}{head/hi[@rendition='\letterhash g']}{xml:normalflush}
+    \xmlsetsetup{#1}{hi[contains(@rendition, '\letterhash et')]}{xml:hi:et}
+    \xmlsetsetup{#1}{hi[contains(@rendition, '\letterhash aq')]}{xml:hi:aq}
+    \xmlsetsetup{#1}{hi[contains(@rendition, '\letterhash k')]}{xml:hi:k}
+    \xmlsetsetup{#1}{p[contains(@rendition, '\letterhash c')]}{xml:p:c}
+    \xmlsetsetup{#1}{bibl[contains(@rendition, '\letterhash k')]}{xml:bibl:k}
 
 % I have to setup the highlighting patterns for each tag. This is bad.
 % A mechanism to match highlighting patterns independently would be
@@ -25,133 +30,173 @@
 \xmlregistersetup{xml:teisetups}
 
 \startxmlsetups xml:teiHeader
-	\xmlflush{#1}
+    \xmlflush{#1}
 \stopxmlsetups
 
 \startxmlsetups xml:fileDesc
-	\xmlflush{#1}
+    \xmlflush{#1}
 \stopxmlsetups
 
 \startxmlsetups xml:titleStmt
-	\xmlflush{#1}
+    \xmlflush{#1}
 \stopxmlsetups
 
 \startxmlsetups xml:title
   \setupinteraction[title={\xmlflush{#1}}]
-	\title{\xmlflush{#1}}
+   \title{\xmlflush{#1}}
 \stopxmlsetups
 
 \startxmlsetups xml:author
-	\xmlflush{#1}
+    \xmlflush{#1}
 \stopxmlsetups
 
 \startxmlsetups xml:persName
-	\xmlflush{#1}
+    \xmlflush{#1}
 \stopxmlsetups
 
 \startxmlsetups xml:forname
-	\xmlflush{#1}
+    \xmlflush{#1}
 \stopxmlsetups
-
 
 \startxmlsetups xml:surname
-	\xmlflush{#1}
+    \xmlflush{#1}
 \stopxmlsetups
 
+\startxmlsetups xml:editionStmt
+    \xmlflush{#1}
+\stopxmlsetups
+
+\startxmlsetups xml:publicationStmt
+    \xmlflush{#1}
+\stopxmlsetups
+
+\startxmlsetups xml:encodingDesc
+    \xmlflush{#1}
+\stopxmlsetups
+
+\startxmlsetups xml:profileDesc
+    \xmlflush{#1}
+\stopxmlsetups
+
+\startxmlsetups xml:langUsage
+    \xmlflush{#1}
+\stopxmlsetups
+
+\startxmlsetups xml:language
+    \mainlanguage[\xmlatt{#1}{ident}]
+\stopxmlsetups
+
+\installlanguage[deu][de]
+
 \startxmlsetups xml:TEI
-	\xmlflush{#1}
+    \xmlflush{#1}
 \stopxmlsetups
 
 \startxmlsetups xml:text
-	\xmlflush{#1}
+    \xmlflush{#1}
 \stopxmlsetups
 
 \startxmlsetups xml:body
 %  \startlinenumbering % Does not start correctly on the first page
-	\xmlflush{#1}
+    \xmlflush{#1}
 \stopxmlsetups
 
 \setuplinenumbering[location=inner,
-                    step=5,
-                    method=page,
-                    style=\tfxx,
-                    align=left,
-                    distance=0.3em,
-                    width=0.3cm]
+            step=5,
+            method=page,
+            style=\tfxx,
+            align=left,
+            distance=0.3em,
+            width=0.3cm]
 
 \startxmlsetups xml:div
-	\xmlflush{#1}
+    \xmlflush{#1}
 \stopxmlsetups
 
-\setuphead[section]
-  [number=no]
+\setuphead[chapter]
+  [number=no,
+   align=center,
+   style=\tfd,
+   page=,]
 
-\startxmlsetups xml:head
-  {\startsection
-  \startalign[center]
-  \tfc
+\setuphead[section]
+  [number=no,
+   align=center,
+   style=\itc]
+
+\startxmlsetups xml:lb
+    \crlf
+\stopxmlsetups
+
+\startxmlsetups xml:normalflush
   \xmlflush{#1}
-  \stopalign
-  \stopsection}
+\stopxmlsetups
+
+\startxmlsetups xml:chapter
+  \startchapter[title={\xmlflush{#1}}]\stopchapter
+\stopxmlsetups
+
+\startxmlsetups xml:section
+  \startsection[title={\xmlflush{#1}}]\stopsection
 \stopxmlsetups
 
 \startxmlsetups xml:hi:in
-	{\placeinitial \xmlflush{#1}}
+    {\placeinitial \xmlflush{#1}}
 \stopxmlsetups
 
 \startxmlsetups xml:hi:g
-	{\em \xmlflush{#1}}
+    {\em \xmlflush{#1}}
 \stopxmlsetups
 
 \startxmlsetups xml:hi:et
-	{\em \xmlflush{#1}}
+    {\em \xmlflush{#1}}
 \stopxmlsetups
 
 \startxmlsetups xml:hi:aq
-	{\ss \xmlflush{#1}}
+    {\ss \xmlflush{#1}}
 \stopxmlsetups
 
 \startxmlsetups xml:hi:k
-	\cap{\xmlflush{#1}}
+    \cap{\xmlflush{#1}}
 \stopxmlsetups
 
 \startxmlsetups xml:hi:c
-	{\startalign[center]
+    {\startalign[center]
   \xmlflush{#1}
   \stopalign}
 \stopxmlsetups
 
 \startxmlsetups xml:cit
-	\xmlflush{#1}
+    \xmlflush{#1}
 \stopxmlsetups
 
 \startxmlsetups xml:quote
-	\xmlflush{#1}
+    \xmlflush{#1}
 \stopxmlsetups
 
 \startxmlsetups xml:bibl
   \rightaligned{
-	\xmlflush{#1}}
+    \xmlflush{#1}}
 \stopxmlsetups
 
 \startxmlsetups xml:bibl:k
   \rightaligned{
-	\cap{\xmlflush{#1}}}
+    \cap{\xmlflush{#1}}}
 \stopxmlsetups
 
 
 \startxmlsetups xml:footnote
-	\footnote{\xmlflush{#1}}
+    \startfootnote\xmlflush{#1}\stopfootnote
 \stopxmlsetups
 
 \startxmlsetups xml:p
   \par
-	\xmlflush{#1}
+    \xmlflush{#1}
   \par
 \stopxmlsetups
 
 \startxmlsetups xml:p:c
-	{\par
+    {\par
   \startalign[center]
   \xmlflush{#1}
   \stopalign
@@ -160,13 +205,12 @@
 
 \startxmlsetups xml:cit:quote:hi
   \startblockquote
-	\xmlflush{#1}
+    \xmlflush{#1}
   \stopblockquote
 \stopxmlsetups
 
-
 \startxmlsetups xml:pb
-	{\tfxx/\inothermargin{\xmlatt{#1}{n}}}
+    {\tfxx/\inothermargin{\xmlatt{#1}{n}}}
 \stopxmlsetups
 
 
@@ -175,27 +219,27 @@
 
 \startmode[original]
 \startxmlsetups xml:lb
-	\crlf
+    \crlf
 \stopxmlsetups
 \stopmode
 
-% This mode typesetzs the source in a new modern fashion.
+% This mode typesets the source in a new modern fashion.
 % Original linebreaks and hyphenations of the scanned book
 % are removed
 
 \startmode[newedition]
 \startxmlsetups xml:p
   \par
-	\cldcontext{string.gsub([[\xmlflush{#1}]], "¬", "\\nospace")}
+    \cldcontext{string.gsub([[\xmlflush{#1}]], "¬", "\\nospace")}
   \par
 \stopxmlsetups
 
 \startxmlsetups xml:lb
+    \crlf
 \stopxmlsetups
 \stopmode
 
 \setupinitial[font=Bold sa 4,distance=3pt,state=start,n=3]
-
 
 % We need the font FreeSerif to display combining diacritical marks.
 % Maybe this should be moved to a style environment
@@ -204,13 +248,16 @@
     [mainface]
     [rm]
     [FreeSerif]
-%    [UnifrakturMaguntia] % If we have sources that needs Fraktur
+%   [UnifrakturMaguntia] % If we have sources that needs Fraktur
 
 \setupbodyfont
     [mainface, 12pt]
 
-
+\setupinteraction
+    [state=start,
+     color=,
+     style=,]
 
 \placebookmarks
-    [part,chapter,hiddentitle,section,subsection,subsubsection]
-    [part,chapter,hiddentitle]
+    [part,chapter,section,subsection,subsubsection]
+    [part,chapter]
