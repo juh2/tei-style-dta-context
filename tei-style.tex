@@ -6,7 +6,7 @@
     \xmlsetsetup{#1}{div[@n='2']/head}{xml:section}
     \xmlsetsetup{#1}{fileDesc/titleStmt}{} % remove unwanted titles
     \xmlsetsetup{#1}{div/lb}{} % remove linebreak outside titles
-    \xmlsetsetup{#1}{p/lb}{} % remove linebreak inside paragraphs
+    \xmlsetsetup{#1}{p/lb}{xml:lb} % we need linebreaks for orginal mode
     \xmlsetsetup{#1}{note[@place='foot']}{xml:footnote}
 % Sometimes a footnote is spread in two different note-tags.
 % Eg. in schiller_erziehung02_1795.TEI-P5.xml
