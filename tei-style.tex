@@ -244,19 +244,30 @@
 % We need the font FreeSerif to display combining diacritical marks.
 % Maybe this should be moved to a style environment
 
-\definefontfamily
+\startmode[latin]
+  \definefontfamily
     [mainface]
     [rm]
     [FreeSerif]
-%   [UnifrakturMaguntia] % If we have sources that needs Fraktur
 
-\setupbodyfont
+  \setupbodyfont
     [mainface, 12pt]
+\stopmode
 
 \setupinteraction
     [state=start,
      color=,
      style=,]
+
+\startmode[fraktur]
+  \definefontfamily
+    [mainface]
+    [rm]
+    [UnifrakturMaguntia] % If we have sources that needs Fraktur
+
+  \setupbodyfont
+    [mainface, 12pt]
+\stopmode
 
 \placebookmarks
     [part,chapter,section,subsection,subsubsection]
