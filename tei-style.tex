@@ -6,7 +6,7 @@
     \xmlsetsetup{#1}{div[@n='2']/head}{xml:section}
     \xmlsetsetup{#1}{fileDesc/titleStmt}{} % remove unwanted titles
     \xmlsetsetup{#1}{div/lb}{} % remove linebreak outside titles
-    \xmlsetsetup{#1}{p/lb}{xml:lb} % we need linebreaks for orginal mode
+    \xmlsetsetup{#1}{p/lb}{xml:lb:inside:p} % we need linebreaks for orginal mode
     \xmlsetsetup{#1}{note[@place='foot']}{xml:footnote}
 % Sometimes a footnote is spread in two different note-tags.
 % Eg. in schiller_erziehung02_1795.TEI-P5.xml
@@ -218,7 +218,7 @@
 % linebreaks and hyphenation of the scanned book
 
 \startmode[original]
-\startxmlsetups xml:lb
+\startxmlsetups xml:lb:inside:p
     \crlf
 \stopxmlsetups
 \stopmode
@@ -233,10 +233,6 @@
     \cldcontext{string.gsub([[\xmlflush{#1}]], "¬", "\\nospace")}
   \par
 \stopxmlsetups
-
-\startxmlsetups xml:lb
-    \crlf
-\stopxmlsetups
 \stopmode
 
 \setupinitial[font=Bold sa 4,distance=3pt,state=start,n=3]
@@ -244,30 +240,32 @@
 % We need the font FreeSerif to display combining diacritical marks.
 % Maybe this should be moved to a style environment
 
-\startmode[latin]
+\startnotmode[fraktur]
   \definefontfamily
     [mainface]
     [rm]
     [FreeSerif]
-
-  \setupbodyfont
-    [mainface, 12pt]
-\stopmode
-
-\setupinteraction
-    [state=start,
-     color=,
-     style=,]
+\stopnotmode
 
 \startmode[fraktur]
   \definefontfamily
     [mainface]
     [rm]
     [UnifrakturMaguntia] % If we have sources that needs Fraktur
-
-  \setupbodyfont
-    [mainface, 12pt]
 \stopmode
+
+\setupbodyfont
+    [mainface, 12pt]
+
+
+\setupinteraction
+    [state=start,
+     color=,
+     style=,
+     contrastcolor=,]
+
+\enabledirectives
+    [references.border=red]
 
 \placebookmarks
     [part,chapter,section,subsection,subsubsection]
