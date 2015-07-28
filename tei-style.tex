@@ -4,6 +4,7 @@
     \xmlsetsetup{#1}{TEI|text|front|titlePage|docTitle|titlePart|byline|docAuthor|body|div|p|lb|cit|quote|bibl|sp|speaker}{xml:*}
     \xmlsetsetup{#1}{div[@n='1']/head}{xml:chapter}
     \xmlsetsetup{#1}{div[@n='2']/head}{xml:section}
+    \xmlsetsetup{#1}{div[@n='3']/head}{xml:subsection}
     \xmlsetsetup{#1}{fileDesc/titleStmt}{} % remove unwanted titles
     \xmlsetsetup{#1}{div/lb}{} % remove linebreak outside titles
     \xmlsetsetup{#1}{p/lb}{xml:lb:inside:p} % we need linebreaks for orginal mode
@@ -15,6 +16,7 @@
     \xmlsetsetup{#1}{hi[contains(@rendition, '\letterhash in')]}{xml:hi:in}
     \xmlsetsetup{#1}{hi[@rendition='\letterhash g']}{xml:hi:g}
     \xmlsetsetup{#1}{hi[@rendition='\letterhash b']}{xml:hi:b}
+    \xmlsetsetup{#1}{hi[contains(@rendition, '\letterhash g' and '\letterhash b')]}{xml:hi:b:g}
     \xmlsetsetup{#1}{head/hi[@rendition='\letterhash g']}{xml:normalflush}
     \xmlsetsetup{#1}{hi[contains(@rendition, '\letterhash et')]}{xml:hi:et}
     \xmlsetsetup{#1}{hi[contains(@rendition, '\letterhash aq')]}{xml:hi:aq}
@@ -119,6 +121,11 @@
     \xmlflush{#1}
 \stopxmlsetups
 
+\definemakeup[titlepage][page]
+
+\setupmakeup[titlepage]
+  [headerstate=empty,
+  footerstate=empty]
 
 \startxmlsetups xml:titlePage
 
@@ -126,13 +133,19 @@
         \vfill
 
         {\itd\xmltext{#1}{docTitle/titlePart[@type='main']}\par}\blank[big]
-        {\resetbreakpoints\itb\setupinterlinespace \xmltext{#1}{docTitle/titlePart[@type='sub']}\par}\blank[3*big]
-        {\sc \xmlconcat{#1}{byline/docAuthor}{\\}}
+        {\resetbreakpoints\itb\setupinterlinespace 
+        \xmltext{#1}{docTitle/titlePart[@type='sub']}\par}\blank[3*big]
+        {\xmltext{#1}{byline}}
 
         \vfill
-        \xmltext{#1}{docImprint/pubPlace}
+        \xmltext{#1}{titlePart[@type='volume']}
         \vfill
+        \xmltext{#1}{docImprint/pubPlace}
+        \par
         \xmltext{#1}{docImprint/publisher}
+        \par
+        \xmltext{#1}{docImprint/docDate}
+
     \stoptitlepagemakeup
 \stopxmlsetups
 
@@ -182,6 +195,11 @@
   \startsection[title={\xmlflush{#1}}]\stopsection
 \stopxmlsetups
 
+\startxmlsetups xml:subsection
+  \startsubsection[title={\xmlflush{#1}}]\stopsection
+\stopxmlsetups
+
+
 \startxmlsetups xml:sp
   \xmlflush{#1}
 \stopxmlsetups
@@ -199,6 +217,10 @@
 
 \startxmlsetups xml:hi:g
     {\em \xmlflush{#1}}
+\stopxmlsetups
+
+\startxmlsetups xml:hi:b:g
+    \xmlflush{#1}
 \stopxmlsetups
 
 \startxmlsetups xml:hi:b
@@ -292,7 +314,7 @@
 \stopxmlsetups
 \stopmode
 
-\setupinitial[font=Bold sa 4,distance=3pt,state=start,n=3]
+\setupinitial[font=Bold sa 4,distance=3pt,state=start,n=2]
 
 % We need the font FreeSerif to display combining diacritical marks.
 % Maybe this should be moved to a style environment
