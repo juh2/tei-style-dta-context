@@ -1,7 +1,7 @@
 \startxmlsetups xml:teisetups
     \xmlsetsetup{#1}{*}{-}
     \xmlsetsetup{#1}{teiHeader|fileDesc|titleStmt|title|author|persName|surname|forname|editionStmt|publicationStmt|encodingDesc|profileDesc|langUsage|language}{xml:*}
-    \xmlsetsetup{#1}{TEI|text|body|div|p|lb|cit|quote|bibl}{xml:*}
+    \xmlsetsetup{#1}{TEI|text|front|titlePage|docTitle|titlePart|byline|docAuthor|body|div|p|lb|cit|quote|bibl|sp|speaker}{xml:*}
     \xmlsetsetup{#1}{div[@n='1']/head}{xml:chapter}
     \xmlsetsetup{#1}{div[@n='2']/head}{xml:section}
     \xmlsetsetup{#1}{fileDesc/titleStmt}{} % remove unwanted titles
@@ -14,6 +14,7 @@
     \xmlsetsetup{#1}{pb}{xml:pb}
     \xmlsetsetup{#1}{hi[contains(@rendition, '\letterhash in')]}{xml:hi:in}
     \xmlsetsetup{#1}{hi[@rendition='\letterhash g']}{xml:hi:g}
+    \xmlsetsetup{#1}{hi[@rendition='\letterhash b']}{xml:hi:b}
     \xmlsetsetup{#1}{head/hi[@rendition='\letterhash g']}{xml:normalflush}
     \xmlsetsetup{#1}{hi[contains(@rendition, '\letterhash et')]}{xml:hi:et}
     \xmlsetsetup{#1}{hi[contains(@rendition, '\letterhash aq')]}{xml:hi:aq}
@@ -96,9 +97,50 @@
     \xmlflush{#1}
 \stopxmlsetups
 
+\startxmlsetups xml:front
+  \startfrontmatter
+  \xmlflush{#1}
+\stopxmlsetups
+
+\startxmlsetups xml:byline
+    \xmlflush{#1}
+\stopxmlsetups
+
+\startxmlsetups xml:docAuthor
+    \xmlflush{#1}
+\stopxmlsetups
+
+\startxmlsetups xml:docTitle
+    \xmlflush{#1}
+\stopxmlsetups
+
+
+\startxmlsetups xml:titlePart
+    \xmlflush{#1}
+\stopxmlsetups
+
+
+\startxmlsetups xml:titlePage
+
+    \starttitlepagemakeup
+        \vfill
+
+        {\itd\xmltext{#1}{docTitle/titlePart[@type='main']}\par}\blank[big]
+        {\resetbreakpoints\itb\setupinterlinespace \xmltext{#1}{docTitle/titlePart[@type='sub']}\par}\blank[3*big]
+        {\sc \xmlconcat{#1}{byline/docAuthor}{\\}}
+
+        \vfill
+        \xmltext{#1}{docImprint/pubPlace}
+        \vfill
+        \xmltext{#1}{docImprint/publisher}
+    \stoptitlepagemakeup
+\stopxmlsetups
+
+
 \startxmlsetups xml:body
 %  \startlinenumbering % Does not start correctly on the first page
-    \xmlflush{#1}
+  \startbodymatter
+  \xmlflush{#1}
 \stopxmlsetups
 
 \setuplinenumbering[location=inner,
@@ -140,12 +182,27 @@
   \startsection[title={\xmlflush{#1}}]\stopsection
 \stopxmlsetups
 
+\startxmlsetups xml:sp
+  \xmlflush{#1}
+\stopxmlsetups
+
+\startxmlsetups xml:speaker
+  {\startalign[center]
+  \xmlflush{#1}
+  \stopalign}
+\stopxmlsetups
+
+
 \startxmlsetups xml:hi:in
     {\placeinitial \xmlflush{#1}}
 \stopxmlsetups
 
 \startxmlsetups xml:hi:g
     {\em \xmlflush{#1}}
+\stopxmlsetups
+
+\startxmlsetups xml:hi:b
+    {\bf \xmlflush{#1}}
 \stopxmlsetups
 
 \startxmlsetups xml:hi:et
