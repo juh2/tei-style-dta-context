@@ -1,6 +1,6 @@
 \startxmlsetups xml:teisetups
     \xmlsetsetup{#1}{*}{-}
-    \xmlsetsetup{#1}{teiHeader|fileDesc|titleStmt|title|author|persName|surname|forename|editionStmt|publicationStmt|encodingDesc|profileDesc|langUsage|language}{xml:*}
+    \xmlsetsetup{#1}{teiHeader|fileDesc|titleStmt|title|author|editor|persName|surname|forename|respStmt|editionStmt|publicationStmt|sourceDesc|encodingDesc|editorialDecl|profileDesc|langUsage|language}{xml:*}
     \xmlsetsetup{#1}{TEI|text|front|titlePage|docTitle|titlePart|byline|docAuthor|body|div|p|lb|cit|quote|bibl|sp|speaker}{xml:*}
     \xmlsetsetup{#1}{div[@n='1']/head}{xml:chapter}
     \xmlsetsetup{#1}{div[@n='2']/head}{xml:section}
@@ -53,6 +53,10 @@
     \xmlflush{#1}
 \stopxmlsetups
 
+\startxmlsetups xml:editor
+  \xmlflush{#1}
+\stopxmlsetups
+
 \startxmlsetups xml:persName
     \xmlflush{#1}
 \stopxmlsetups
@@ -65,6 +69,10 @@
     \xmlflush{#1}
 \stopxmlsetups
 
+\startxmlsetups xml:respStmt
+  \xmlflush{#1}
+\stopxmlsetups
+
 \startxmlsetups xml:editionStmt
     \xmlflush{#1}
 \stopxmlsetups
@@ -73,8 +81,17 @@
     \xmlflush{#1}
 \stopxmlsetups
 
+\startxmlsetups xml:sourceDesc
+  \xmlflush{#1}
+\stopxmlsetups
+
+
 \startxmlsetups xml:encodingDesc
     \xmlflush{#1}
+\stopxmlsetups
+
+\startxmlsetups xml:editorialDecl
+  \xmlflush{#1}
 \stopxmlsetups
 
 \startxmlsetups xml:profileDesc
